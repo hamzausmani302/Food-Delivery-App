@@ -16,6 +16,7 @@ export default function ItemDisplay(props) {
             style={styles.addToCart}
             onPress={() => {
               console.log("added to cart");
+              //props.addItem({ id: 3 });
             }}
           >
             <Text style={{ color: "white", fontWeight: "800" }}>

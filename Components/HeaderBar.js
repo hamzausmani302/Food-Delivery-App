@@ -3,13 +3,16 @@ import { StyleSheet, SafeAreaView, View, Text } from "react-native";
 import { Icon } from "react-native-elements";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import tw from "tailwind-react-native-classnames";
+import { changeCart, addItem } from "../actions/CartChange";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 let width20 = "20%";
 let width40 = "40%";
 let width80 = "80%";
-export default function HeaderBar(props) {
+function HeaderBar(props) {
   const [search, setsearch] = useState("");
   const address = "Malir 15 , jokio village";
-
+  console.log(props);
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
@@ -31,7 +34,12 @@ export default function HeaderBar(props) {
             {address}
           </Text>
         </View>
-        <TouchableOpacity style={{ flex: 1, paddingTop: 10 }}>
+        <TouchableOpacity
+          onPress={() => {
+            props.addItem({ id: 4 });
+          }}
+          style={{ flex: 1, paddingTop: 10 }}
+        >
           <Icon
             width={70}
             name="star"
@@ -87,3 +95,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+const mapStateToProps = (state) => {
+  const { cart } = state;
+  return { cart };
+};
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ addItem }, dispatch);
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderBar);

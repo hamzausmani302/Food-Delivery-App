@@ -7,34 +7,34 @@ import LoginScreen from "./Pages/LoginScreen";
 import RestaurantsScreen from "./Pages/RestaurantsScreen";
 import SingleRestaurant from "./Pages/SingleRestaurant";
 import CartScreen from "./Pages/CartScreen";
-
-export default function App() {
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import cartReducer from "./reducers/cartReducer";
+function App(props) {
   const Stack = createNativeStackNavigator();
-
+  const store = createStore(cartReducer);
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="Home"
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName="Home"
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
 
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="RestaurantsScreen" component={RestaurantsScreen} />
-        <Stack.Screen name="Cart" component={CartScreen} />
-        <Stack.Screen name="SingleRestaurant" component={SingleRestaurant} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen
+            name="RestaurantsScreen"
+            component={RestaurantsScreen}
+          />
+          <Stack.Screen name="Cart" component={CartScreen} />
+          <Stack.Screen name="SingleRestaurant" component={SingleRestaurant} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;

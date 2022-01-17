@@ -11,8 +11,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../Components/HeaderBar";
 import Restaurant from "../Components/Restaurant";
 
-export default function HomeScreenContent({ navigation }) {
-  console.log(navigation);
+function HomeScreenContent({ navigation }) {
   const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
   const renderItem = (item) => {
     return (
@@ -62,3 +61,4 @@ const styles = StyleSheet.create({
     maxHeight: 150,
   },
 });
+export default HomeScreenContent;

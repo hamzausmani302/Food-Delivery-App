@@ -12,6 +12,8 @@ import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import tw from "tailwind-react-native-classnames";
 import Item1 from "../Components/ItemDisplay.js";
+import { changeCart, addItem } from "../actions/CartChange";
+import { connect } from "react-redux";
 const HALF = "50%";
 const getArray = (rating) => {
   let arr = new Array(rating);
@@ -23,7 +25,7 @@ const getArray = (rating) => {
   return arr;
 };
 
-export default function SingleRestaurant({ navigation }) {
+function SingleRestaurant({ cart, navigation }) {
   const restaurants = [
     { id: 1, name: "Broadway Pizza" },
     { id: 2, name: "Broadway Pizza" },
@@ -126,3 +128,8 @@ const styles = StyleSheet.create({
   nameContainer: { marginBottom: 6, flex: 0.1, backgroundColor: "white" },
   ItemContainer: { flex: 0.8, backgroundColor: "white" },
 });
+const mapStateToProps = (state) => {
+  const { cart } = state;
+  return { cart };
+};
+export default connect(mapStateToProps)(SingleRestaurant);
