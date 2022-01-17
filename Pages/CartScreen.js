@@ -47,7 +47,7 @@ export default function CartScreen({ navigation }) {
           }}
         >
           <Text style={{ alignSelf: "flex-end", fontWeight: "800" }}>
-            Rs. {item.price}.00
+            Rs. {item.price}.0
           </Text>
         </View>
       </View>
