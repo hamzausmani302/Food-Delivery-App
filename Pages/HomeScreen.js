@@ -10,10 +10,10 @@ function HomeScreen(props) {
   const Drawer = createDrawerNavigator();
 
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator initialRouteName="Home1">
       <Drawer.Screen
         options={{ headerShown: false }}
-        name="Home"
+        name="Home1"
         component={HomeScreenContent}
       />
       <Drawer.Screen

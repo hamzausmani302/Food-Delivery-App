@@ -10,11 +10,16 @@ import {
   Keyboard,
   ScrollView,
   TouchableOpacity,
+  AsyncStorage
 } from "react-native";
+
 import tw from "tailwind-react-native-classnames";
 import Logo from "../assets/Images/loginlogo.jpg";
+import Toast from "react-native-toast-message";
 const FullWidth = "100%";
 const Width80 = "80%";
+
+const DOMAIN="http://192.168.1.109:5110";
 
 export default function LoginScreen({ navigation }) {
   const windowHeight = Dimensions.get("window").height;
@@ -25,9 +30,66 @@ export default function LoginScreen({ navigation }) {
 
   const [keyboardStatus, setKeyboardStatus] = useState(false);
 
-  const handleSubmit = () => {
-    console.log("navigating");
-    navigation.navigate("Home");
+
+  const storeAsync = async (data)=>{
+    try{
+      const str = JSON.stringify(data);
+      await AsyncStorage.setItem("user",str);
+      console.log("set key")
+    }catch(err){
+      console.log("error setting key");
+    }
+
+  }
+
+  const handleSubmit =async  (e) => {
+      //send post request to backend server
+      console.log(DOMAIN.concat("/users/login") , phone , password)
+      fetch(DOMAIN.concat("/users/login") , {
+        method : "POST",
+        
+        headers: {
+          "Accept": 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(
+          {
+              "contactNumber" : phone ,
+              "password" : password
+          }
+        )
+      } ).then(res=>{
+        if(res.status == 404){
+          throw new Error("error");
+        }else{
+        console.log("success");
+        return res.json();
+        }
+      })
+      .then(async (res)=>{
+        Toast.show({
+          type: 'success',
+          text1: 'Hello',
+          text2: 'This is some something 👋'
+        });
+        await storeAsync(res);
+        navigation.navigate("Home");
+        
+
+      }).catch(err=>{
+        Toast.show({
+          type: 'error',
+          text1: 'Sign in failed',
+          text2: `Incorrect contact number or password`
+        });
+      })
+
+      //check response
+
+      //navigate if reponse
+
+    
+    // navigation.navigate("Home");
   };
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -49,6 +111,7 @@ export default function LoginScreen({ navigation }) {
           <Image source={Logo} />
         </View>
       </View>
+      <Toast />
       <ScrollView
         style={{
           flex: 0.5,
@@ -67,8 +130,8 @@ export default function LoginScreen({ navigation }) {
                 borderColor: "rgba(248, 48, 48, 0.8)",
               },
             ]}
-            onChangeText={phone}
-            value={setphone}
+            onChangeText={(e)=>{setphone(e)}}
+            value={phone}
             placeholder="enter phone number"
             keyboardType="number-pad"
             onFocus={() => {
@@ -88,8 +151,10 @@ export default function LoginScreen({ navigation }) {
                 borderColor: "rgba(248, 48, 48, 0.8)",
               },
             ]}
-            onChangeText={password}
-            value={setpassword}
+            onChangeText={(e)=>{
+              setpassword(e);
+            }}
+            value={password}
             placeholder="enter password"
             secure={true}
             onFocus={() => {

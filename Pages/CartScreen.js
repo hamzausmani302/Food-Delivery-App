@@ -13,7 +13,7 @@ export default function CartScreen({ navigation }) {
   const placeOrder = () => {
     console.log("Placing Order");
   };
-  const renderItem = ({ item }) => {
+  const renderItem1 = ({ item }) => {
     return (
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
         <View style={{ flex: 0.1 }}>
@@ -129,7 +129,7 @@ export default function CartScreen({ navigation }) {
       <View style={styles.ItemBox}>
         <FlatList
           data={items}
-          renderItem={renderItem}
+          renderItem={renderItem1}
           keyExtractor={(item) => item.id}
         />
       </View>
