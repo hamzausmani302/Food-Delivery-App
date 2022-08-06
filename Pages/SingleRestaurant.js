@@ -13,6 +13,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import tw from "tailwind-react-native-classnames";
 import Item1 from "../Components/ItemDisplay.js";
 import { changeCart, addItem } from "../actions/CartChange";
+import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 const HALF = "50%";
 const getArray = (rating) => {
@@ -25,7 +26,12 @@ const getArray = (rating) => {
   return arr;
 };
 
-function SingleRestaurant({ cart, navigation }) {
+
+function SingleRestaurant({ addItem , cart, navigation }) {
+  const ItemAdd = (item)=>{
+    addItem(item);
+    console.log(cart);
+  }
   const restaurants = [
     { id: 1, name: "Broadway Pizza" },
     { id: 2, name: "Broadway Pizza" },
@@ -84,7 +90,7 @@ function SingleRestaurant({ cart, navigation }) {
         <Text style={styles.titleText}>ITEMS</Text>
         <FlatList
           data={restaurants}
-          renderItem={Item1}
+          renderItem={(item)=>{return <Item1 ITEM={item} ADDITEM={ItemAdd}/>}}
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -132,4 +138,7 @@ const mapStateToProps = (state) => {
   const { cart } = state;
   return { cart };
 };
-export default connect(mapStateToProps)(SingleRestaurant);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators({ addItem }, dispatch);
+
+export default connect(mapStateToProps,mapDispatchToProps)(SingleRestaurant);

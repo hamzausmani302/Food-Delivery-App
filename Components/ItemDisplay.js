@@ -2,7 +2,13 @@ import React from "react";
 import { Image, StyleSheet, View, Text, Pressable } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import I from "../assets/Images/item.png";
-export default function ItemDisplay(props) {
+import { changeCart, addItem } from "../actions/CartChange";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+
+function ItemDisplay(props) {
+  
   return (
     <View style={styles.container}>
       <View style={styles.infoContainer}>
@@ -16,7 +22,9 @@ export default function ItemDisplay(props) {
             style={styles.addToCart}
             onPress={() => {
               console.log("added to cart");
-              //props.addItem({ id: 3 });
+              
+              props.ADDITEM(props.ITEM.item);
+
             }}
           >
             <Text style={{ color: "white", fontWeight: "800" }}>
@@ -65,3 +73,11 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 });
+// const mapStateToProps = (state) => {
+//   const { cart } = state;
+//   return { cart };
+// };
+// const mapDispatchToProps = (dispatch) =>
+//   bindActionCreators({ addItem }, dispatch);
+// export default connect(mapStateToProps, mapDispatchToProps)(ItemDisplay);
+export default ItemDisplay;

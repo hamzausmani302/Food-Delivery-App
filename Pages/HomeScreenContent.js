@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   FlatList,
@@ -6,14 +6,31 @@ import {
   SafeAreaView,
   View,
   Text,
+  AsyncStorage
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../Components/HeaderBar";
 import Restaurant from "../Components/Restaurant";
 
+
+
+
 function HomeScreenContent({ navigation }) {
+  let [user , setUser] = useState({});
+  const retrieveUser =async  ()=>{
+      const _userStr = await AsyncStorage.getItem("user");
+      const _user = JSON.parse(_userStr)
+
+      setUser(_user);
+    }
   const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
-  const renderItem = (item) => {
+  useEffect(
+    async ()=>{
+      await retrieveUser();
+      console.log(user.contactNumber);
+    },[]
+  )
+  const renderItem1 = (item) => {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -42,7 +59,7 @@ function HomeScreenContent({ navigation }) {
         <FlatList
           horizontal={true}
           data={DATA}
-          renderItem={renderItem}
+          renderItem={renderItem1}
           keyExtractor={(item) => item.id}
         />
       </View>

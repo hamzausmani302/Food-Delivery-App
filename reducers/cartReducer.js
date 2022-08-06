@@ -13,6 +13,7 @@ const cartReducer = (state = initialState, action) => {
       };
     case "ADD_ITEM":
       console.log("testing successful");
+      
       return {
         cart: [...state.cart, action.payload],
       };

@@ -7,7 +7,7 @@ const H70 = "70%";
 
 export default function RestaurantsScreen({ navigation }) {
   const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
-  const renderItem = (item) => {
+  const renderItem1 = () => {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -35,7 +35,7 @@ export default function RestaurantsScreen({ navigation }) {
         <Text>Your Restaurants</Text>
         <FlatList
           data={DATA}
-          renderItem={renderItem}
+          renderItem={renderItem1}
           keyExtractor={(item) => item.id}
         />
       </View>

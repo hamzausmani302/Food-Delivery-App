@@ -12,7 +12,7 @@ let width80 = "80%";
 function HeaderBar(props) {
   const [search, setsearch] = useState("");
   const address = "Malir 15 , jokio village";
-  console.log(props);
+ 
   return (
     <View style={styles.container}>
       <View style={styles.container1}>

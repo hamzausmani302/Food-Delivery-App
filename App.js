@@ -20,7 +20,7 @@ function App(props) {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName="Home"
+          initialRouteName="LoginScreen"
         >
           <Stack.Screen name="Home" component={HomeScreen} />
 
