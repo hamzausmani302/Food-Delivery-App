@@ -4,9 +4,13 @@ import Pizza from "../assets/Images/pizza.jpg";
 const FullWidth = "100%";
 const Width70 = "70%";
 const path = "../assets/Images/pizza.jpg";
-export default function Restaurant() {
+export default function Restaurant(props) {
+  const {restName,address,rating,cuisines } = props.info.item;
+  console.log("rest",restName , props.info.index);
+
+  // console.log(props.info)
   return (
-    <TouchableOpacity style={styles.container}>
+    <View style={styles.container}>
       <Text
         style={{
           position: "absolute",
@@ -19,10 +23,10 @@ export default function Restaurant() {
         Celebration Deal
       </Text>
       <Image style={styles.productImage} source={require(path)} />
-      <Text style={styles.productTitle}>Broadway Pizza - Malir Cantt</Text>
-      <Text style={styles.productCuisine}>Italian,Pizza and Deserts</Text>
+      <Text style={styles.productTitle}>{restName || "Broadway Pizza - Malir Cantt"}</Text>
+      <Text style={styles.productCuisine}>{cuisines || "Italian,Pizza and Deserts"}</Text>
       <Text style={styles.deliveryCharge}>PKR 59 delivery fee</Text>
-    </TouchableOpacity>
+    </View>
   );
 }
 const styles = StyleSheet.create({

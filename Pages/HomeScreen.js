@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 
 function HomeScreen(props) {
   const Drawer = createDrawerNavigator();
-
+  // console.log(props);
   return (
     <Drawer.Navigator initialRouteName="Home1">
       <Drawer.Screen
@@ -26,8 +26,8 @@ function HomeScreen(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { cart } = state;
-  return { cart };
+  const { cart , user } = state;
+  return { cart , user };
 };
 
 export default connect(mapStateToProps)(HomeScreen);

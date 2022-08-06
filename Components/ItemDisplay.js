@@ -8,22 +8,24 @@ import { connect } from "react-redux";
 
 
 function ItemDisplay(props) {
-  
+  console.log("p",props);
+  const {itemName,description,price , image } = props.ITEM.item;
+  const {restInfo} = props;
   return (
     <View style={styles.container}>
       <View style={styles.infoContainer}>
-        <Text style={tw`font-bold pl-2.5 pt-2`}>Dancing Fajita</Text>
+        <Text style={tw`font-bold pl-2.5 pt-2`}>{itemName}</Text>
         <Text style={tw`font-light pl-2.5`}>
-          filled with lettuce meat,embroided onion
+          {description}
         </Text>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Text style={tw`font-bold mt-2  pl-2.5`}>from Rs 999.00</Text>
+          <Text style={tw`font-bold mt-2  pl-2.5`}>from Rs {price}.00</Text>
           <Pressable
             style={styles.addToCart}
             onPress={() => {
               console.log("added to cart");
               
-              props.ADDITEM(props.ITEM.item);
+              props.ADDITEM({"item" : props.ITEM.item  , "rest" : restInfo._id});
 
             }}
           >
@@ -34,7 +36,7 @@ function ItemDisplay(props) {
         </View>
       </View>
       <View style={styles.imageContainer}>
-        <Image resizeMode="center" style={styles.image} source={I} />
+        <Image resizeMode="center" style={styles.image} source={{uri:image }} />
       </View>
     </View>
   );

@@ -1,7 +1,8 @@
 import { CART_CHANGE } from "../constants/index";
 
 const initialState = {
-  cart: [{ id: 1 }],
+  cart: [],
+  user : {name : "hamza"}
 };
 
 const cartReducer = (state = initialState, action) => {
@@ -17,6 +18,12 @@ const cartReducer = (state = initialState, action) => {
       return {
         cart: [...state.cart, action.payload],
       };
+    case "ADD_USER":
+      console.log("testing");
+      return {
+        ...state,
+        user : action.payload
+      }   
     default:
       return state;
   }

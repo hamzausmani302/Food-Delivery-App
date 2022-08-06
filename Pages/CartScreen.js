@@ -5,19 +5,45 @@ import {
   View,
   Text,
   StyleSheet,
+  AsyncStorage,
   Pressable,
 } from "react-native";
 import { Divider, Icon, Input } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
-export default function CartScreen({ navigation }) {
-  const placeOrder = () => {
-    console.log("Placing Order");
+import { connect } from "react-redux";
+import getDOMAIN from "../DOMAIN";
+
+function CartScreen({ navigation  ,cart,user }) {
+  const getItem = async ()=>{
+    const userStr  =  await AsyncStorage.getItem("user");
+    const _user = JSON.parse(userStr);
+    
+    return _user;
+    
+}
+  const placeOrder = async () => {
+    try{
+      const _user = await getItem();
+    const requestBody = {
+        // userId : user.user._id,
+        restId : "",
+        items : "",
+        address : "",
+        totalamount : ""
+    }
+      
+    } catch(err  ){
+      console.log(err);
+    } 
+    
   };
-  const renderItem1 = ({ item }) => {
+  const renderItem1 = (item1) => {
+    const {item} = item1.item;
+    console.log(item)
     return (
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
         <View style={{ flex: 0.1 }}>
-          <Input type="numeric" placeholder={`${item.quantity}`} />
+          <Input type="numeric" placeholder={`${1}`} />
         </View>
         <View
           style={{
@@ -27,7 +53,7 @@ export default function CartScreen({ navigation }) {
         >
           <Image
             style={{ width: 60, height: 60, alignSelf: "center" }}
-            source={require("../assets/Images/item.png")}
+            source={{uri : item.image}}
           />
         </View>
         <View
@@ -37,7 +63,7 @@ export default function CartScreen({ navigation }) {
           }}
         >
           <Text style={{ textAlign: "center", color: "#F83030" }}>
-            {item.name}
+            {item.itemName}
           </Text>
         </View>
         <View
@@ -53,44 +79,16 @@ export default function CartScreen({ navigation }) {
       </View>
     );
   };
+
   const getTotal = (items) => {
+    
     let sum = 0;
     for (let item of items) {
-      sum += item.price;
+      sum += item.item.price;
     }
 
     return sum;
   };
-  const [items, setitems] = useState([
-    {
-      id: 1,
-      quantity: 1,
-      image: "../assets/Images/item.png",
-      name: "Premium Thin Pizza",
-      price: 499,
-    },
-    {
-      id: 2,
-      quantity: 1,
-      image: "../assets/Images/item.png",
-      name: "Premium Thin Pizza",
-      price: 499,
-    },
-    {
-      id: 3,
-      quantity: 1,
-      image: "../assets/Images/item.png",
-      name: "Premium Thin Pizza",
-      price: 499,
-    },
-    {
-      id: 4,
-      quantity: 2,
-      image: "../assets/Images/item.png",
-      name: "Premium Thin Pizza",
-      price: 499,
-    },
-  ]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,9 +126,9 @@ export default function CartScreen({ navigation }) {
       </View>
       <View style={styles.ItemBox}>
         <FlatList
-          data={items}
+          data={cart}
           renderItem={renderItem1}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item , ind) => ind}
         />
       </View>
       <Divider inset={true} insetType="middle" />
@@ -157,7 +155,7 @@ export default function CartScreen({ navigation }) {
             fontSize: 14,
           }}
         >
-          Rs.{getTotal(items)}.00
+          Rs.{getTotal(cart)}.00
         </Text>
       </View>
       <View style={styles.PlaceBox}>
@@ -204,3 +202,13 @@ const styles = StyleSheet.create({
   TotalBox: { flex: 0.2, backgroundColor: "white", flexDirection: "row" },
   PlaceBox: { flex: 0.1 },
 });
+
+
+const mapStateToProps = (state)=>{
+  const {cart,user} = state;
+  return {cart,user}
+}
+
+
+export default connect(mapStateToProps)(CartScreen)
+

@@ -1,10 +1,14 @@
-1.saving user login info in safe area 
-2.getting data on home screen from database
+
+2.getting data on home screen from database   ✅
+//2.1 . adding JWT auth in login and signup    ✅
+
 3.getting into each restaurant
 4.getting data of tbe seleacted restaunt
 5. add items in cart
 6.remove items from cart
 7. place order by user
+
+
 
 8. play wih oauth on the login page
 9. Integrate location api to fetch location from google

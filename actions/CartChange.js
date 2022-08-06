@@ -6,10 +6,17 @@ export function changeCart(cart) {
   };
 }
 
+export function addUser(user) {
+  return {
+    type : "ADD_USER",
+    payload : user
+  }
+}
+
 export function addItem(item) {
 
   return {
-    type: ADD_ITEM,
+    type: "ADD_ITEM",
     payload: item,
   };
 }

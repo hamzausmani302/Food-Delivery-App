@@ -12,24 +12,37 @@ import {
   TouchableOpacity,
   AsyncStorage
 } from "react-native";
-
 import tw from "tailwind-react-native-classnames";
 import Logo from "../assets/Images/loginlogo.jpg";
 import Toast from "react-native-toast-message";
+import getDOMAIN from "../DOMAIN";
+import {bindActionCreators } from "redux";
+
+import {addUser } from "../actions/CartChange";
+import { connect } from "react-redux";
 const FullWidth = "100%";
 const Width80 = "80%";
 
-const DOMAIN="http://192.168.1.109:5110";
+const DOMAIN=getDOMAIN();
 
-export default function LoginScreen({ navigation }) {
+function LoginScreen({ navigation , addUser , user }) {
   const windowHeight = Dimensions.get("window").height;
   const [phone, setphone] = useState("");
   const [borderphone, setborderphone] = useState(false);
   const [password, setpassword] = useState("");
   const [borderpassword, setborderpassword] = useState(false);
-
+  const [loggedIn , setLoggedIn] = useState(false);
   const [keyboardStatus, setKeyboardStatus] = useState(false);
 
+  const getItem = async ()=>{
+      const userStr  =  await AsyncStorage.getItem("user");
+      
+      return userStr;
+      
+  }
+  useEffect(async ()=>{
+  
+  }, []);
 
   const storeAsync = async (data)=>{
     try{
@@ -62,7 +75,8 @@ export default function LoginScreen({ navigation }) {
         if(res.status == 404){
           throw new Error("error");
         }else{
-        console.log("success");
+          
+          console.log("success");
         return res.json();
         }
       })
@@ -72,11 +86,14 @@ export default function LoginScreen({ navigation }) {
           text1: 'Hello',
           text2: 'This is some something 👋'
         });
+        addUser(res);
         await storeAsync(res);
+        console.log("myuser",user);
         navigation.navigate("Home");
         
 
       }).catch(err=>{
+        console.log(err.message);
         Toast.show({
           type: 'error',
           text1: 'Sign in failed',
@@ -223,3 +240,15 @@ const styles = StyleSheet.create({
   },
   CredView: {},
 });
+
+const mapStateToProps = (state)=>{
+  const {cart , user} = state;
+  return {user};
+}
+const mapDispatchToProps = (dispatch)=>{
+  return bindActionCreators({addUser} , dispatch);
+}
+
+
+
+export default connect(mapStateToProps , mapDispatchToProps) (LoginScreen);

@@ -11,39 +11,78 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../Components/HeaderBar";
 import Restaurant from "../Components/Restaurant";
+import { changeCart, addItem , addUser } from "../actions/CartChange";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import Toast from "react-native-toast-message";
+import DOMAIN from "../DOMAIN";
 
 
+function HomeScreenContent({ navigation ,cart,User,addUser} ) {
+  
+  console.log("cart",cart);
 
-
-function HomeScreenContent({ navigation }) {
   let [user , setUser] = useState({});
+  const [restaurants , setRestaurants] = useState([]);
   const retrieveUser =async  ()=>{
       const _userStr = await AsyncStorage.getItem("user");
+      
       const _user = JSON.parse(_userStr)
-
+      console.log("_user" , _user)
       setUser(_user);
+
     }
+
+  const fetchRestaurants = async ()=>{
+    fetch(`${DOMAIN()}/restaurants/all`)
+    .then(data=>data.json())
+    .then(data=>{setRestaurants(data)})
+    .catch(err=>{
+      console.log(err.message);
+    })
+  }  
   const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
   useEffect(
     async ()=>{
+      
       await retrieveUser();
-      console.log(user.contactNumber);
+      addUser(user)
+      // console.log("user",user.user);
+      if(user.user){
+        setTimeout(()=>{
+          Toast.show({
+            type: 'success',
+            text1: `Hello ${user.user.firstName.toUpperCase()},`,
+            text2: 'Lets order something',
+            position : "bottom"
+          });
+  
+        },1000)
+      }
+      
+      await fetchRestaurants();
+      
     },[]
   )
   const renderItem1 = (item) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("SingleRestaurant");
+          
+          navigation.navigate("SingleRestaurant" , {
+            rest : item
+          });
         }}
-        style={{ height: 200 }}
+        style={{width :250, height: 200 }}
       >
-        <Restaurant />
+        <Restaurant info={item}/>
       </TouchableOpacity>
     );
   };
   return (
     <SafeAreaView style={styles.container}>
+      
+      <Toast />
       <View style={styles.headercontainer}>
         <Header
           cartClick={() => {
@@ -58,9 +97,9 @@ function HomeScreenContent({ navigation }) {
         <Text>Your Restaurants</Text>
         <FlatList
           horizontal={true}
-          data={DATA}
+          data={restaurants}
           renderItem={renderItem1}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
         />
       </View>
     </SafeAreaView>
@@ -78,4 +117,17 @@ const styles = StyleSheet.create({
     maxHeight: 150,
   },
 });
-export default HomeScreenContent;
+
+
+const mapStateToProps = (state)=>{
+    const  {cart ,user} = state;
+    return {cart : cart ,User : user};
+}
+
+
+const mapDispatchToProps = (dispatch)=>{
+  return bindActionCreators({addUser} , dispatch);
+}
+
+
+export default connect(mapStateToProps , mapDispatchToProps)(HomeScreenContent);

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -17,6 +17,7 @@ import {bindActionCreators} from 'redux';
 import { connect } from "react-redux";
 const HALF = "50%";
 const getArray = (rating) => {
+  
   let arr = new Array(rating);
 
   for (let i = 0; i < rating; i++) {
@@ -27,10 +28,23 @@ const getArray = (rating) => {
 };
 
 
-function SingleRestaurant({ addItem , cart, navigation }) {
+function SingleRestaurant({ route , addItem , cart, navigation }) {
+  const [gotData , setGotData] = useState(false); 
+  
+  
+  // console.log("restaurat" , _restaurant);
+  const _restaurant =  route.params.rest.item;
+  console.log("r",_restaurant)
+  useEffect(()=>{
+    if(route.params.rest && route.params.rest.item){
+      setGotData(true);
+    }  
+
+
+  },[])
   const ItemAdd = (item)=>{
     addItem(item);
-    console.log(cart);
+    // console.log(cart);
   }
   const restaurants = [
     { id: 1, name: "Broadway Pizza" },
@@ -45,7 +59,7 @@ function SingleRestaurant({ addItem , cart, navigation }) {
   const distance = "2.3 km ";
   const stars = 4;
   return (
-    <SafeAreaView style={styles.container}>
+    gotData ? (<SafeAreaView style={styles.container}>
       <ImageBackground
         source={require("../assets/Images/restaurant.jpg")}
         resizeMode="cover"
@@ -69,10 +83,10 @@ function SingleRestaurant({ addItem , cart, navigation }) {
       </ImageBackground>
 
       <View style={styles.nameContainer}>
-        <Text style={[styles.title, tw`font-bold`]}>{name}</Text>
+        <Text style={[styles.title, tw`font-bold`]}>{_restaurant.restName}</Text>
         <View style={{ flex: 1, flexDirection: "row" }}>
           <Text style={[styles.caption]}>{distance} | </Text>
-          {getArray(stars).map((el, index) => {
+          {getArray(Math.floor(_restaurant.rating)).map((el, index) => {
             return (
               <Icon
                 key={index}
@@ -89,12 +103,12 @@ function SingleRestaurant({ addItem , cart, navigation }) {
       <View style={styles.ItemContainer}>
         <Text style={styles.titleText}>ITEMS</Text>
         <FlatList
-          data={restaurants}
-          renderItem={(item)=>{return <Item1 ITEM={item} ADDITEM={ItemAdd}/>}}
-          keyExtractor={(item) => item.id}
+          data={_restaurant.menu}
+          renderItem={(item)=>{return <Item1 restInfo={_restaurant} ITEM={item} ADDITEM={addItem}/>}}
+          keyExtractor={(item) => item.itemName}
         />
       </View>
-    </SafeAreaView>
+    </SafeAreaView>) : null
   );
 }
 
